@@ -28,8 +28,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'mesmanagement-jimabraham2005-dev.apps.rm2.thpm.p1.openshiftapps.com',
-    'localhost',
-    '127.0.0.1',
 ]
 
 

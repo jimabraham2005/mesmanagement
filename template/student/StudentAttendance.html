@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mark Attendance | Student</title>
+    <link rel="stylesheet" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+</head>
+
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="{% url 'studentdashboard' %}">
+        Mess Management – Student
+    </a>
+</nav>
+
+<section class="container my-5">
+    <h2 class="text-center mb-4">Mark Attendance</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} text-center">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="row justify-content-center">
+
+        {% for meal in meals %}
+            <div class="col-md-3 mb-4">
+                <div class="card text-center shadow">
+
+                    <div class="card-header bg-primary text-white">
+                        {{ meal }}
+                    </div>
+
+                    <div class="card-body">
+                        {% if meal in marked_meals %}
+                            <span class="badge badge-success p-2">Marked</span>
+                        {% else %}
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="meal" value="{{ meal }}">
+                                <button type="submit" class="btn btn-success btn-block">
+                                    Mark Attendance
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+        {% endfor %}
+
+        </div>
+
+</section>
+
+<footer class="bg-dark text-white text-center py-3">
+    © 2025 Hostel Mess Management System
+</footer>
+
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'styles/bootstrap4/bootstrap.min.js' %}"></script>
+
+</body>
+</html>

@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mess Cut | Student</title>
+    <link rel="stylesheet" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+</head>
+
+<body>
+
+<nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand" href="{% url 'studentdashboard' %}">Student Dashboard</a>
+</nav>
+
+<div class="container my-5">
+
+    <h3 class="text-center mb-4">Apply Mess Cut</h3>
+
+    <!-- Messages -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Mess Cut Form -->
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label>Date</label>
+                        <input type="date" name="date" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label>Meal</label>
+                        <select name="meal" class="form-control" required>
+                            <option value="">Select Meal</option>
+                            <option>Breakfast</option>
+                            <option>Lunch</option>
+                            <option>Dinner</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label>Reason (optional)</label>
+                        <input type="text" name="reason" class="form-control">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success">
+                    Apply Mess Cut
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Mess Cut History -->
+    <h4 class="mb-3">Your Mess Cut Requests</h4>
+
+    <table class="table table-bordered text-center">
+        <thead class="thead-dark">
+            <tr>
+                <th>Date</th>
+                <th>Meal</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cut in mess_cuts %}
+            <tr>
+                <td>{{ cut.date }}</td>
+                <td>{{ cut.meal }}</td>
+                <td>
+                    {% if cut.status == 'Approved' %}
+                        <span class="badge badge-success">Approved</span>
+                    {% elif cut.status == 'Rejected' %}
+                        <span class="badge badge-danger">Rejected</span>
+                    {% else %}
+                        <span class="badge badge-warning">Pending</span>
+                    {% endif %}
+
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No mess cut requests</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+</html>

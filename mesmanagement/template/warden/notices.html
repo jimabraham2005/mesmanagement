@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Warden Notices</title>
+    <link rel="stylesheet" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+</head>
+<body>
+
+<nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand" href="{% url 'warden_dashboard' %}">Dashboard</a>
+    <a href="{% url 'add_notice' %}" class="btn btn-success btn-sm">
+        + Add Notice
+    </a>
+</nav>
+
+<div class="container my-5">
+
+    <h3 class="mb-4">Notices</h3>
+
+    {% for n in notices %}
+    <div class="card shadow mb-3">
+        <div class="card-body">
+            <h5>{{ n.title }}</h5>
+            <p>{{ n.message }}</p>
+            <small class="text-muted">
+                Posted on {{ n.created_at|date:"d M Y" }}
+            </small>
+        </div>
+    </div>
+    {% empty %}
+        <p>No notices available</p>
+    {% endfor %}
+
+</div>
+
+</body>
+</html>

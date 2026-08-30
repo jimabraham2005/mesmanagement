@@ -1,0 +1,148 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Admin Dashboard | Mess Management System</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+	<link rel="stylesheet" href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+	<link rel="stylesheet" href="{% static 'styles/main_styles.css' %}">
+	<link rel="stylesheet" href="{% static 'styles/responsive.css' %}">
+</head>
+
+<body>
+
+	<!-- Header -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" href="#">Mess Management – Admin</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#adminNav">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="adminNav">
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item"><a class="nav-link" href="{% url 'add_warden' %}">Add Warden</a></li>
+				<li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
+				<li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+			</ul>
+		</div>
+	</nav>
+
+	<!-- Admin Dashboard -->
+	<section class="container my-5">
+		<h2 class="text-center mb-4">Admin Dashboard</h2>
+
+		<div class="row">
+
+			<div class="col-md-3 mb-4">
+				<div class="card text-center shadow">
+					<div class="card-body">
+						<i class="fa fa-users fa-2x text-primary mb-2"></i>
+						<h5>Total Students</h5>
+						<h3>{{ total_students }}</h3>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-3 mb-4">
+				<div class="card text-center shadow">
+					<div class="card-body">
+						<i class="fa fa-qrcode fa-2x text-success mb-2"></i>
+						<h5>Today's Attendance</h5>
+						<h3>{{ today_attendance }}</h3>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-3 mb-4">
+				<div class="card text-center shadow">
+					<div class="card-body">
+						<i class="fa fa-credit-card fa-2x text-warning mb-2"></i>
+						<h5>Pending Payments</h5>
+						<h3>{{ pending_payments }}</h3>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-3 mb-4">
+				<div class="card text-center shadow">
+					<div class="card-body">
+						<i class="fa fa-comments fa-2x text-danger mb-2"></i>
+						<h5>Complaints</h5>
+						<h3>{{ complaints }}</h3>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+
+		</div>
+	</section>
+
+	<!-- Admin Functions -->
+	<section class="container my-5">
+		<h3 class="text-center mb-4">Admin Functions</h3>
+
+		<div class="row text-center">
+
+			<div class="col-md-3 mb-3">
+				<a href="{% url 'menumanagement' %}" class="btn btn-primary w-100 py-3">
+					<i class="fa fa-cutlery"></i><br>Manage Menu
+				</a>
+			</div>
+
+			<div class="col-md-3 mb-3">
+				<a href="{% url 'attendance' %}" class="btn btn-success w-100 py-3">
+					<i class="fa fa-qrcode"></i><br>Attendance
+				</a>
+			</div>
+
+			<div class="col-md-3 mb-3">
+				<a href="{% url 'admin_generate_bill' %}" class="btn btn-warning w-100 py-3">
+					<i class="fa fa-file-text"></i><br>Generate Bills
+				</a>
+			</div>
+
+			<div class="col-md-3 mb-3">
+				<a href="{% url 'admin_complaints' %}" class="btn btn-danger w-100 py-3">
+					<i class="fa fa-comments"></i><br>Complaints
+				</a>
+			</div>
+
+			<div class="col-md-3 mb-3">
+				<a href="{% url 'admin_students' %}" class="btn btn-secondary w-100 py-3">
+					<i class="fa fa-users"></i><br>Students
+				</a>
+			</div>
+			<div class="col-md-3 mb-3">
+				<a href="{% url 'admin_mess_cut_list' %}" class="btn btn-outline-primary w-100 py-3 shadow">
+					<i class="fa fa-check-square "></i><br>
+					Mess Cut Approval
+				</a>
+			</div>
+
+			<div class="col-md-3 mb-3">
+				<a href="{% url 'export_students_excel' %}" class="btn btn-outline-info w-100 py-3">
+					<i class="fa fa-file-excel-o"></i><br>Export Students
+				</a>
+			</div>
+
+		</div>
+	</section>
+
+	<!-- Footer -->
+	<footer class="bg-dark text-white text-center py-3">
+		© 2025 Hostel Mess Management System
+	</footer>
+
+	<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+	<script src="{% static 'styles/bootstrap4/popper.js' %}"></script>
+	<script src="{% static 'styles/bootstrap4/bootstrap.min.js' %}"></script>
+
+</body>
+
+</html>

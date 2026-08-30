@@ -1,0 +1,129 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Warden Profile | Mess Management</title>
+    <link rel="stylesheet" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+    <style>
+        body {
+            background: #f4f7f6;
+        }
+
+        .profile-card {
+            max-width: 600px;
+            margin: 50px auto;
+            border-radius: 20px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, #2c3e50, #4ca1af);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .profile-header img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 5px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 15px;
+        }
+
+        .profile-body {
+            padding: 40px;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            padding: 12px;
+            border: 1px solid #eee;
+            background: #fdfdfd;
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 10px rgba(76, 161, 175, 0.2);
+            border-color: #4ca1af;
+        }
+
+        .btn-update {
+            background: #4ca1af;
+            border: none;
+            border-radius: 10px;
+            padding: 15px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+
+        .btn-update:hover {
+            background: #2c3e50;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'warden_dashboard' %}">
+                <i class="fa fa-arrow-left mr-2"></i> Back to Dashboard
+            </a>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} mt-4 shadow-sm">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="mb-3">
+                    <i class="fa fa-user-circle fa-5x"></i>
+                </div>
+                <h3>{{ profile.user.username }}</h3>
+                <span class="badge badge-light px-3 py-2">Hostel Warden</span>
+            </div>
+            <div class="profile-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group mb-4">
+                        <label class="text-muted small font-weight-bold">USERNAME</label>
+                        <input type="text" class="form-control" value="{{ profile.user.username }}" disabled>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label class="text-muted small font-weight-bold">EMAIL ADDRESS</label>
+                        <input type="email" name="email" class="form-control" value="{{ profile.user.email }}" required>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label class="text-muted small font-weight-bold">PHONE NUMBER</label>
+                        <input type="text" name="phone" class="form-control" value="{{ profile.phone }}" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block btn-update shadow mt-4">
+                        UPDATE PROFILE
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'styles/bootstrap4/bootstrap.min.js' %}"></script>
+</body>
+
+</html>

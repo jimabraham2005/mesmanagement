@@ -1,0 +1,126 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weekly Menu | Mess Management</title>
+
+    <link rel="stylesheet" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+        .day-header {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+        .meal-card {
+            border-radius: 12px;
+            transition: transform 0.2s;
+        }
+        .meal-card:hover {
+            transform: scale(1.02);
+        }
+        .meal-header {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        ul {
+            padding-left: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow">
+    <a class="navbar-brand font-weight-bold" href="{% url 'studentdashboard' %}">
+        <i class="fa fa-cutlery"></i> Mess Management – Student
+    </a>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}">
+                <i class="fa fa-sign-out"></i> Logout
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<!-- Content -->
+<section class="container my-5">
+
+    <div class="text-center mb-5">
+        <h2 class="font-weight-bold">
+            <i class="fa fa-calendar"></i> Weekly Mess Menu
+        </h2>
+        <p class="text-muted">View daily meals planned by the mess administration</p>
+    </div>
+
+    {% if menus %}
+        {% regroup menus by day as day_list %}
+
+        {% for day in day_list %}
+        <div class="card shadow-sm mb-5 border-0">
+
+            <div class="card-header bg-primary text-white text-center">
+                <span class="day-header">
+                    <i class="fa fa-sun-o"></i> {{ day.grouper }}
+                </span>
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+
+                    {% for menu in day.list %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card meal-card shadow-sm h-100">
+
+                            <div class="card-header bg-secondary text-white text-center meal-header">
+                                {% if menu.meal == "Breakfast" %}
+                                    <i class="fa fa-coffee"></i>
+                                {% elif menu.meal == "Lunch" %}
+                                    <i class="fa fa-spoon"></i>
+                                {% else %}
+                                    <i class="fa fa-moon-o"></i>
+                                {% endif %}
+                                {{ menu.meal }}
+                            </div>
+
+                            <div class="card-body">
+                                <ul class="mb-0">
+                                    {% for item in menu.items_list %}
+                                        <li>{{ item }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    {% else %}
+        <div class="alert alert-info text-center shadow-sm">
+            <i class="fa fa-info-circle"></i> Weekly menu not updated yet.
+        </div>
+    {% endif %}
+
+</section>
+
+<!-- Footer -->
+<footer class="bg-dark text-white text-center py-3 mt-5">
+    © 2025 Hostel Mess Management System
+</footer>
+
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'styles/bootstrap4/bootstrap.min.js' %}"></script>
+
+</body>
+</html>

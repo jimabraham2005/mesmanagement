@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mess Cut Approval | Admin</title>
+    <link rel="stylesheet" href="/static/styles/bootstrap4/bootstrap.min.css">
+</head>
+
+<body>
+
+<nav class="navbar navbar-dark bg-dark">
+    <span class="navbar-brand">Mess Cut Approval - Admin</span>
+</nav>
+
+<div class="container my-5">
+
+    <h3 class="text-center mb-4">Mess Cut Requests</h3>
+
+    <!-- Messages -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <table class="table table-bordered table-striped text-center">
+        <thead class="thead-dark">
+            <tr>
+                <th>Student</th>
+                <th>Date</th>
+                <th>Meal</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for cut in mess_cuts %}
+            <tr>
+                <td>{{ cut.student.username }}</td>
+                <td>{{ cut.date }}</td>
+                <td>{{ cut.meal }}</td>
+                <td>{{ cut.reason|default:"—" }}</td>
+                <td>
+                    {% if cut.status == 'Approved' %}
+                        <span class="badge badge-success">Approved</span>
+                    {% elif cut.status == 'Rejected' %}
+                        <span class="badge badge-danger">Rejected</span>
+                    {% else %}
+                        <span class="badge badge-warning">Pending</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if cut.status == 'Pending' %}
+                        <a href="{% url 'update_mess_cut_status' cut.id 'approve' %}"
+                           class="btn btn-success btn-sm">Approve</a>
+
+                        <a href="{% url 'update_mess_cut_status' cut.id 'reject' %}"
+                           class="btn btn-danger btn-sm">Reject</a>
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6">No mess cut requests found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+</html>

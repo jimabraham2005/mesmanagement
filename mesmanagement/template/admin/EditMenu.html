@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Edit Menu | Mess Management System</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+</head>
+<body>
+
+<div class="container my-5">
+    <h2 class="mb-4 text-center">Edit Menu</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-row">
+            <!-- Day Dropdown -->
+            <div class="form-group col-md-4">
+                <label>Day</label>
+                <select name="day" class="form-control">
+                    {% for d in days %}
+                        <option value="{{ d }}" {% if menu.day == d %}selected{% endif %}>{{ d }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Meal Dropdown -->
+            <div class="form-group col-md-4">
+                <label>Meal</label>
+                <select name="meal" class="form-control">
+                    {% for m in meals %}
+                        <option value="{{ m }}" {% if menu.meal == m %}selected{% endif %}>{{ m }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Items Input -->
+            <div class="form-group col-md-4">
+                <label>Menu Items</label>
+                <input type="text" name="items" class="form-control" value="{{ menu.items }}">
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success">
+            <i class="fa fa-save"></i> Update Menu
+        </button>
+        <a href="{% url 'menumanagement' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'styles/bootstrap4/bootstrap.min.js' %}"></script>
+</body>
+</html>

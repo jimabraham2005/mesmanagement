@@ -1,0 +1,209 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Student Dashboard | Mess Management</title>
+    <link rel="stylesheet" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+    <style>
+        .complaint-btn {
+            width: 55px;
+            height: 55px;
+            position: fixed;
+            top: 74px;
+            right: 30px;
+            z-index: 1000;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Mess Management – Student</a>
+        <ul class="navbar-nav ml-auto align-items-center">
+            <!-- Notification Bell -->
+            <li class="nav-item mr-3">
+                <a class="nav-link position-relative" href="{% url 'student_notifications' %}">
+                    <i class="fa fa-bell fa-lg"></i>
+                    {% if unread_notifications_count > 0 %}
+                    <span class="badge badge-danger badge-pill position-absolute" style="top: -5px; right: -5px;">
+                        {{ unread_notifications_count }}
+                    </span>
+                    {% endif %}
+                </a>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="text-right mt-4">
+        <a href="{% url 'student_complaint' %}" class="btn btn-danger rounded-circle shadow complaint-btn"
+            title="Report a Complaint">
+            <i class="fa fa-exclamation-circle"></i>
+        </a>
+    </div>
+
+    <section class="container my-5">
+        <h2 class="text-center mb-4">Welcome, {{ user.username }}</h2>
+
+        <!-- Dashboard Cards -->
+        <div class="row text-center">
+
+            <!-- Mark Attendance -->
+            <div class="col-md-3 mb-3">
+                <a href="{% url 'student_attendance' %}" class="btn btn-danger w-100 py-4 shadow">
+                    <i class="fa fa-check-circle fa-2x mb-2"></i><br>
+                    Mark Attendance
+                </a>
+            </div>
+
+            <!-- Daily Menu -->
+            <div class="col-md-3 mb-3">
+                <a href="{% url 'studentmenu' %}" class="btn btn-primary w-100 py-4 shadow">
+                    <i class="fa fa-cutlery fa-2x mb-2"></i><br>
+                    Daily Menu
+                </a>
+            </div>
+
+            <!-- Apply Mess Cut -->
+            <div class="col-md-3 mb-3">
+                <a href="{% url 'student_mess_cut' %}" class="btn btn-success w-100 py-4 shadow">
+                    <i class="fa fa-calendar-times-o fa-2x mb-2"></i><br>
+                    Apply Mess Cut
+                </a>
+            </div>
+
+            <!-- Weekly Menu -->
+            <div class="col-md-3 mb-3">
+                <a href="{% url 'student_weekly_menu' %}" class="btn btn-secondary w-100 py-4 shadow">
+                    <i class="fa fa-calendar fa-2x mb-2"></i><br>
+                    Weekly Menu
+                </a>
+            </div>
+            <!-- Complaint / Feedback -->
+            <div class="col-md-3 mb-3">
+                <a href="{% url 'student_complaint_status' %}" class="btn btn-dark w-100 py-4 shadow">
+                    <i class="fa fa-history fa-2x mb-2"></i><br>
+                    Complaint Status
+                </a>
+            </div>
+
+            <!-- Warden Notices -->
+            <div class="col-md-3 mb-3">
+                <a href="{% url 'student_warden_notices' %}" class="btn btn-info w-100 py-4 shadow">
+                    <i class="fa fa-bullhorn fa-2x mb-2"></i><br>
+                    Warden Notices
+                </a>
+            </div>
+
+
+
+        </div>
+
+        </div>
+
+
+        <!-- Summary Section -->
+        <div class="row mt-5">
+            <div class="col-md-4 mb-3">
+                <div class="card shadow text-center">
+                    <div class="card-body">
+                        <i class="fa fa-check fa-2x mb-2 text-success"></i>
+                        <h5>Total Meals Attended</h5>
+                        <h3>{{ total_attendance }}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <div class="card shadow text-center">
+                    <div class="card-body">
+                        <i class="fa fa-calendar-times-o fa-2x mb-2 text-warning"></i>
+                        <h5>Mess Cut Requests</h5>
+                        <h3>{{ mess_cuts_count }}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <div class="card shadow text-center">
+                    <div class="card-body">
+                        <i class="fa fa-credit-card fa-2x mb-2 text-danger"></i>
+                        <h5>Pending Bills</h5>
+                        <h3>{{ pending_bills.count }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Bills Table -->
+        {% if pending_bills %}
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0">Your Pending Bills</h5>
+                    </div>
+                    <div class="card-body table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Month</th>
+                                    <th>Meals</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for bill in pending_bills %}
+                                <tr>
+                                    <td>{{ bill.start_date|date:"F Y" }}</td>
+                                    <td>{{ bill.total_meals }}</td>
+                                    <td>₹{{ bill.amount }}</td>
+                                    <td>
+                                        {% if bill.status == 'Unpaid' %}
+                                        <span class="badge badge-warning">Unpaid</span>
+                                        {% elif bill.status == 'Pending Approval' %}
+                                        <span class="badge badge-info">Pending Approval</span>
+                                        {% else %}
+                                        <span class="badge badge-success">{{ bill.status }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if bill.status == 'Unpaid' %}
+                                        <a href="{% url 'student_pay_bill' bill.id %}"
+                                            class="btn btn-sm btn-primary">Pay Now</a>
+                                        {% else %}
+                                        <button class="btn btn-sm btn-secondary" disabled>Processing</button>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+    </section>
+
+    <footer class="bg-dark text-white text-center py-3">
+        © 2025 Hostel Mess Management System
+    </footer>
+
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'styles/bootstrap4/bootstrap.min.js' %}"></script>
+</body>
+
+</html>

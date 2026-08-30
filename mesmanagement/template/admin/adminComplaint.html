@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Complaints | Admin</title>
+    <link rel="stylesheet" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+</head>
+
+<body>
+
+    <nav class="navbar navbar-dark bg-dark">
+        <a class="navbar-brand" href="{% url 'admin_dashboard' %}">Admin Dashboard</a>
+    </nav>
+
+    <div class="container my-5">
+        <h3>Student Complaints</h3>
+
+        <table class="table table-bordered">
+            <thead class="thead-dark text-center">
+                <tr>
+                    <th>Student</th>
+                    <th>Title</th>
+                    <th>Complaint</th>
+                    <th>Reply</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for c in complaints %}
+                <tr>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="complaint_id" value="{{ c.id }}">
+
+                        <td>{{ c.student.username }}</td>
+                        <td>{{ c.subject }}</td>
+                        <td>{{ c.message }}</td>
+
+                        <td>
+                            {% if c.status == "Pending" %}
+                            <textarea name="admin_reply" class="form-control" rows="2" placeholder="Type reply here..."
+                                required></textarea>
+                            {% else %}
+                            {{ c.admin_reply }}
+                            {% endif %}
+                        </td>
+
+                        <td class="text-center">
+                            <span class="badge
+                            {% if c.status == 'Resolved' %}badge-success
+                            {% elif c.status == 'Rejected' %}badge-danger
+                            {% else %}badge-warning{% endif %}">
+                                {{ c.status }}
+                            </span>
+                        </td>
+
+                        <td class="text-center">
+                            {% if c.status == "Pending" %}
+                            <button name="action" value="resolve" class="btn btn-sm btn-success">
+                                Resolve
+                            </button>
+                            <button name="action" value="reject" class="btn btn-sm btn-danger">
+                                Reject
+                            </button>
+                            {% else %}
+                            <small class="text-muted">Closed</small>
+                            {% endif %}
+                        </td>
+                    </form>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">No complaints</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+</body>
+
+</html>

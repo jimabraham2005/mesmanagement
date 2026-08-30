@@ -1,0 +1,189 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Attendance | Mess Management System</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="{% url 'admin_dashboard' %}">
+        Mess Management – Admin
+    </a>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+        </li>
+    </ul>
+</nav>
+
+<!-- ================= MAIN CONTENT ================= -->
+<section class="container my-5">
+
+    <h2 class="text-center mb-4">Student Attendance</h2>
+
+    <!-- ========== FILTER FORM ========== -->
+    <div class="card shadow mb-4">
+        <div class="card-header bg-primary text-white">
+            Attendance Filter
+        </div>
+        <div class="card-body">
+            <form method="get">
+                <div class="row">
+
+                    <div class="col-md-4 mb-3">
+                        <label>Date</label>
+                        <input type="date" class="form-control" name="date" required>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label>Meal</label>
+                        <select class="form-control" name="meal" required>
+                            <option value="">Select Meal</option>
+                            <option>Breakfast</option>
+                            <option>Lunch</option>
+                            <option>Dinner</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label>Action</label><br>
+                        <button type="submit" class="btn btn-success mt-2">
+                            <i class="fa fa-search"></i> Load Students
+                        </button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========== ATTENDANCE TABLE ========== -->
+    <div class="card shadow">
+        <div class="card-header bg-secondary text-white">
+            Mark Attendance
+        </div>
+        <div class="card-body table-responsive">
+
+            <form method="post">
+                {% csrf_token %}
+
+                <table class="table table-bordered text-center">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Register No</th>
+                            <th>Student Name</th>
+                            <th>Breakfast</th>
+                            <th>Lunch</th>
+                            <th>Dinner</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student, meals in attendance_map.items %}
+                        <tr>
+                            <td>{{ student.profile.reg_no }}</td>
+                            <td>{{ student.username }}</td>
+
+                            <td>
+                                {% if 'Breakfast' in meals %}
+                                    <span class="badge badge-success">✔</span>
+                                {% else %}
+                                    <span class="badge badge-danger">✘</span>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                {% if 'Lunch' in meals %}
+                                    <span class="badge badge-success">✔</span>
+                                {% else %}
+                                    <span class="badge badge-danger">✘</span>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                {% if 'Dinner' in meals %}
+                                    <span class="badge badge-success">✔</span>
+                                {% else %}
+                                    <span class="badge badge-danger">✘</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5">No attendance marked today</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+
+
+                {% if students %}
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-save"></i> Save Attendance
+                    </button>
+                </div>
+                {% endif %}
+
+            </form>
+
+        </div>
+    </div>
+
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="bg-dark text-white text-center py-3 mt-5">
+    © 2025 Hostel Mess Management System
+</footer>
+
+<!-- ================= MESSAGE MODAL ================= -->
+{% if messages %}
+<div class="modal fade" id="messageModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title">Notification</h5>
+                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body text-center">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal">OK</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- ================= SCRIPTS ================= -->
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'styles/bootstrap4/popper.js' %}"></script>
+<script src="{% static 'styles/bootstrap4/bootstrap.min.js' %}"></script>
+
+{% if messages %}
+<script>
+    $(document).ready(function () {
+        $('#messageModal').modal('show');
+    });
+</script>
+{% endif %}
+
+</body>
+</html>

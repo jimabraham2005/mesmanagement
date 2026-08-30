@@ -1,0 +1,127 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Warden Dashboard | Mess Management</title>
+
+    <link rel="stylesheet" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+</head>
+
+<body class="bg-light">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow">
+        <a class="navbar-brand font-weight-bold" href="#">
+            <i class="fa fa-building"></i> Warden Panel
+        </a>
+
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item mr-3 text-white mt-2">
+                Welcome, {{ request.user.username }}
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'logout' %}" class="btn btn-danger btn-sm">
+                    <i class="fa fa-sign-out"></i> Logout
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Content -->
+    <div class="container my-5">
+
+        <h3 class="text-center mb-4">
+            <i class="fa fa-dashboard"></i> Warden Dashboard
+        </h3>
+
+        <!-- Stats Cards -->
+        <div class="row text-center mb-4">
+
+            <!-- Pending Complaints -->
+            <div class="col-md-4 mb-3">
+                <div class="card shadow border-left-danger">
+                    <div class="card-body">
+                        <i class="fa fa-exclamation-circle fa-2x text-danger mb-2"></i>
+                        <h6 class="text-muted">Pending Complaints</h6>
+                        <h2 class="font-weight-bold">{{ pending_complaints }}</h2>
+                        <a href="{% url 'warden_complaints' %}" class="btn btn-outline-danger btn-sm mt-2">
+                            View Complaints
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resolved Complaints -->
+            <div class="col-md-4 mb-3">
+                <div class="card shadow border-left-success">
+                    <div class="card-body">
+                        <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
+                        <h6 class="text-muted">Resolved Complaints</h6>
+                        <h2 class="font-weight-bold">{{ resolved_complaints }}</h2>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notices -->
+            <div class="col-md-4 mb-3">
+                <div class="card shadow border-left-primary">
+                    <div class="card-body">
+                        <i class="fa fa-bullhorn fa-2x text-primary mb-2"></i>
+                        <h6 class="text-muted">Total Notices</h6>
+                        <h2 class="font-weight-bold">{{ total_notices }}</h2>
+                        <a href="{% url 'warden_notices' %}" class="btn btn-outline-primary btn-sm mt-2">
+                            View Notices
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white">
+                <i class="fa fa-bolt"></i> Quick Actions
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+
+                    <div class="col-md-4 mb-3">
+                        <a href="{% url 'warden_complaints' %}" class="btn btn-danger w-100 py-3">
+                            <i class="fa fa-comments fa-2x mb-2"></i><br>
+                            Manage Complaints
+                        </a>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <a href="{% url 'warden_notices' %}" class="btn btn-success w-100 py-3">
+                            <i class="fa fa-bullhorn fa-2x mb-2"></i><br>
+                            Post Notices
+                        </a>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <a href="{% url 'warden_profile' %}" class="btn btn-secondary w-100 py-3">
+                            <i class="fa fa-user fa-2x mb-2"></i><br>
+                            My Profile
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+        © 2025 Hostel Mess Management System
+    </footer>
+
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'styles/bootstrap4/bootstrap.min.js' %}"></script>
+</body>
+
+</html>

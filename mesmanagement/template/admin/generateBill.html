@@ -1,0 +1,153 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Generate Bills | Admin</title>
+    <link rel="stylesheet" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+</head>
+
+<body>
+
+    <nav class="navbar navbar-dark bg-dark">
+        <a class="navbar-brand" href="{% url 'admin_dashboard' %}">Admin Dashboard</a>
+    </nav>
+
+    <div class="container my-5">
+
+        <h3 class="text-center mb-4">Generate Monthly Bills</h3>
+
+        <!-- Generate Bill -->
+        <div class="row mb-4">
+            <!-- Filter Section -->
+            <div class="col-md-6 mb-3">
+                <div class="card shadow h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-muted font-weight-bold">Filter Existing Bills</h5>
+                        <form method="get" class="row">
+                            <div class="col-8">
+                                <input type="month" name="month" class="form-control" value="{{ selected_month }}"
+                                    required>
+                            </div>
+                            <div class="col-4">
+                                <button class="btn btn-outline-primary w-100">
+                                    <i class="fa fa-filter"></i> Filter
+                                </button>
+                            </div>
+                        </form>
+                        <div class="mt-2">
+                            <a href="{% url 'admin_generate_bill' %}"
+                                class="btn btn-link btn-sm text-secondary px-0">Show All History</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Generate Section -->
+            <div class="col-md-6 mb-3">
+                <div class="card shadow h-100 border-left-success">
+                    <div class="card-body">
+                        <h5 class="card-title text-success font-weight-bold">Generate New Bills</h5>
+                        <form method="post" class="row">
+                            {% csrf_token %}
+                            <div class="col-8">
+                                <input type="month" name="month" class="form-control" required>
+                            </div>
+                            <div class="col-4">
+                                <button type="submit" name="generate" class="btn btn-success w-100">
+                                    <i class="fa fa-plus-circle"></i> Generate
+                                </button>
+                            </div>
+                        </form>
+                        <p class="mt-2 small text-muted">Calculates total meals - approved cuts.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alert Messages -->
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <!-- Bills Table -->
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                Generated Bills
+            </div>
+            <div class="card-body table-responsive">
+                <table class="table table-bordered text-center">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Register No</th>
+                            <th>Student</th>
+                            <th>Month</th>
+                            <th>Meals</th>
+                            <th>Amount (₹)</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for bill in bills %}
+                        <tr>
+                            <td>{{ bill.student.profile.reg_no }}</td>
+                            <td>{{ bill.student.username }}</td>
+                            <td>
+                                {{ bill.start_date|date:"M Y" }}
+                            </td>
+
+                            <td>{{ bill.total_meals }}</td>
+                            <td>{{ bill.amount }}</td>
+                            <td>
+                                {% if bill.status == 'Unpaid' %}
+                                <span class="badge badge-warning">Unpaid</span>
+                                {% elif bill.status == 'Pending Approval' %}
+                                <span class="badge badge-info">Pending Approval</span>
+                                {% else %}
+                                <span class="badge badge-success">Paid</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if bill.status == 'Pending Approval' %}
+                                <a href="{% url 'admin_update_bill_status' bill.id 'Paid' %}"
+                                    class="btn btn-sm btn-success">
+                                    Mark Paid
+                                </a>
+                                <a href="{% url 'admin_update_bill_status' bill.id 'Unpaid' %}"
+                                    class="btn btn-sm btn-danger">
+                                    Reject
+                                </a>
+                                {% elif bill.status == 'Unpaid' %}
+                                <a href="{% url 'admin_update_bill_status' bill.id 'Paid' %}"
+                                    class="btn btn-sm btn-outline-success">
+                                    Set Paid
+                                </a>
+                                {% else %}
+                                <span class="text-success"><i class="fa fa-check-circle"></i> Completed</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6">No bills generated</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

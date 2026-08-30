@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Payment | Mess Management</title>
+    <link rel="stylesheet" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+    <style>
+        body {
+            background: #f8f9fa;
+        }
+
+        .payment-card {
+            max-width: 500px;
+            margin: 50px auto;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .payment-header {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .payment-body {
+            background: white;
+            padding: 30px;
+        }
+
+        .qr-placeholder {
+            width: 200px;
+            height: 200px;
+            background: #eee;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #ccc;
+            font-size: 14px;
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="payment-card shadow">
+            <div class="payment-header">
+                <h4>Bill Payment</h4>
+                <p class="mb-0">{{ bill.start_date|date:"F Y" }}</p>
+            </div>
+            <div class="payment-body text-center">
+                <h2 class="mb-4">₹{{ bill.amount }}</h2>
+
+                <p class="text-muted">Scan the QR code below to pay via any UPI app (Dummy)</p>
+
+                <div class="qr-placeholder">
+                    <i class="fa fa-qrcode fa-5x"></i>
+                    <br>
+                    <span>DUMMY QR CODE</span>
+                </div>
+
+                <div class="alert alert-info py-2 mt-4">
+                    <small><i class="fa fa-info-circle"></i> After payment, click "Confirm Payment" to notify the
+                        admin.</small>
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-block btn-lg py-3 mt-3 shadow">
+                        Confirm Payment
+                    </button>
+                </form>
+
+                <a href="{% url 'studentdashboard' %}" class="btn btn-link text-muted mt-3">Cancel</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

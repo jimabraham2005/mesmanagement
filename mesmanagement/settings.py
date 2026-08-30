@@ -26,7 +26,11 @@ SECRET_KEY = 'django-insecure-$72@#9n7v_gga8#30$$6q@u9i!=xs)-p#ick0qg8w3xu*3^@dk
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'mesmanagement-jimabraham2005-dev.apps.rm2.thpm.p1.openshiftapps.com',
+    'localhost',
+    '127.0.0.1',
+]
 
 
 # Application definition

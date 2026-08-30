@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Notifications | Mess Management</title>
+    <link rel="stylesheet" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+    <style>
+        .notification-card {
+            border-left: 5px solid #007bff;
+            transition: all 0.3s ease;
+        }
+
+        .notification-card.unread {
+            border-left: 5px solid #dc3545;
+            background-color: #fff8f8;
+        }
+
+        .notification-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'studentdashboard' %}">Mess Management</a>
+            <ul class="navbar-nav ml-auto align-items-center">
+                <li class="nav-item mr-3">
+                    <a class="nav-link position-relative" href="{% url 'student_notifications' %}">
+                        <i class="fa fa-bell"></i>
+                        {% if unread_notifications_count > 0 %}
+                        <span class="badge badge-danger badge-pill position-absolute"
+                            style="top: -5px; right: -5px; font-size: 0.7rem;">
+                            {{ unread_notifications_count }}
+                        </span>
+                        {% endif %}
+                    </a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'studentdashboard' %}">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2><i class="fa fa-bell text-primary"></i> Notifications</h2>
+                </div>
+
+                {% for notification in notifications %}
+                <div class="card mb-3 notification-card {% if not notification.is_read %}unread{% endif %}">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="mb-1">{{ notification.message }}</p>
+                            <small class="text-muted"><i class="fa fa-clock-o"></i> {{ notification.created_at|timesince
+                                }} ago</small>
+                        </div>
+                        {% if not notification.is_read %}
+                        <a href="{% url 'mark_notification_read' notification.id %}"
+                            class="btn btn-sm btn-outline-success">
+                            <i class="fa fa-check"></i> Mark Read
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center py-5">
+                    <i class="fa fa-bell-slash-o fa-3x text-muted mb-3"></i>
+                    <p class="lead text-muted">No notifications yet.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'styles/bootstrap4/bootstrap.min.js' %}"></script>
+</body>
+
+</html>

@@ -1,0 +1,170 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Manage Menu | Mess Management System</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="{% url 'admin_dashboard' %}">
+        Mess Management – Admin
+    </a>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+        </li>
+    </ul>
+</nav>
+
+<!-- ================= MAIN CONTENT ================= -->
+<section class="container my-5">
+
+    <h2 class="text-center mb-4">Manage Mess Menu</h2>
+
+    <!-- ========== ADD MENU FORM ========== -->
+    <div class="card shadow mb-4">
+        <div class="card-header bg-primary text-white">
+            Add New Menu
+        </div>
+        <div class="card-body">
+            <form method="post" action="menumanagement" >
+                {% csrf_token %}
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label>Day</label>
+                        <select class="form-control" name="day" required>
+                            <option value="">Select Day</option>
+                            <option>Monday</option>
+                            <option>Tuesday</option>
+                            <option>Wednesday</option>
+                            <option>Thursday</option>
+                            <option>Friday</option>
+                            <option>Saturday</option>
+                            <option>Sunday</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label>Meal Type</label>
+                        <select class="form-control" name="meal" required>
+                            <option value="">Select Meal</option>
+                            <option>Breakfast</option>
+                            <option>Lunch</option>
+                            <option>Dinner</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label>Menu Items</label>
+                        <input type="text" class="form-control" name="items"
+                               placeholder="Rice, Curry, Chapati" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success">
+                    <i class="fa fa-plus"></i> Add Menu
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========== MENU LIST ========== -->
+    <div class="card shadow">
+        <div class="card-header bg-secondary text-white">
+            Existing Menu
+        </div>
+        <div class="card-body table-responsive">
+            <table class="table table-bordered text-center">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Day</th>
+                        <th>Meal</th>
+                        <th>Items</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for menu in menus %}
+                    <tr>
+                        <td>{{ menu.day }}</td>
+                        <td>{{ menu.meal }}</td>
+                        <td>{{ menu.items }}</td>
+                        <td>
+                            <a href="{% url 'edit_menu' menu.id %}" class="btn btn-sm btn-warning">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <a href="{% url 'delete_menu' menu.id %}" class="btn btn-sm btn-danger">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">No menu available</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="bg-dark text-white text-center py-3 mt-5">
+    © 2025 Hostel Mess Management System
+</footer>
+
+<!-- ================= MESSAGE MODAL ================= -->
+{% if messages %}
+<div class="modal fade" id="messageModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title">Notification</h5>
+                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body text-center">
+                {% for message in messages %}
+                    <p class="mb-2">{{ message }}</p>
+                {% endfor %}
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    OK
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- ================= SCRIPTS ================= -->
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'styles/bootstrap4/popper.js' %}"></script>
+<script src="{% static 'styles/bootstrap4/bootstrap.min.js' %}"></script>
+
+{% if messages %}
+<script>
+    $(document).ready(function () {
+        $('#messageModal').modal('show');
+    });
+</script>
+{% endif %}
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resolve Complaint</title>
+    <link rel="stylesheet" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+</head>
+<body>
+
+<nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand" href="{% url 'warden_complaints' %}">Back</a>
+</nav>
+
+<div class="container my-5">
+
+    <h3 class="mb-4">Resolve Complaint</h3>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <p><b>Student:</b> {{ complaint.student.username }}</p>
+            <p><b>Subject:</b> {{ complaint.subject }}</p>
+            <p><b>Complaint:</b><br>{{ complaint.message }}</p>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Warden Reply</label>
+                    <textarea name="reply" class="form-control" rows="4"
+                              placeholder="Type your response..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-success">
+                    Mark as Resolved
+                </button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

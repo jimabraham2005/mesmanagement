@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registered Students | Admin</title>
+
+    <link rel="stylesheet" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+</head>
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow">
+    <a class="navbar-brand" href="{% url 'admin_dashboard' %}">
+        <i class="fa fa-cutlery"></i> Mess Management – Admin
+    </a>
+
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item mr-3 text-white mt-2">
+            <i class="fa fa-user"></i> {{ request.user.username }}
+        </li>
+        <li class="nav-item">
+            <a class="btn btn-outline-light btn-sm" href="{% url 'logout' %}">
+                Logout
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<!-- ================= CONTENT ================= -->
+<div class="container my-5">
+
+    <!-- Top Actions -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="mb-0">
+            <i class="fa fa-users"></i> Registered Students
+        </h3>
+
+        <div>
+            <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary mr-2">
+                <i class="fa fa-arrow-left"></i> Back
+            </a>
+
+            <a href="{% url 'export_students_excel' %}" class="btn btn-success">
+                <i class="fa fa-download"></i> Export Excel
+            </a>
+        </div>
+    </div>
+
+    <!-- Students Table -->
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            Student Details
+        </div>
+
+        <div class="card-body table-responsive">
+            <table class="table table-bordered table-hover text-center">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Register No</th>
+                        <th>Username</th>
+                        <th>Department</th>
+                        <th>Room No</th>
+                        <th>Phone</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ student.reg_no }}</td>
+                        <td>{{ student.user.username }}</td>
+                        <td>{{ student.department }}</td>
+                        <td>{{ student.room_no }}</td>
+                        <td>{{ student.phone }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted">
+                            No students registered yet
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer class="bg-dark text-white text-center py-3 mt-5">
+    © 2025 Hostel Mess Management System
+</footer>
+
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'styles/bootstrap4/bootstrap.min.js' %}"></script>
+
+</body>
+</html>
